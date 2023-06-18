@@ -8,9 +8,62 @@
             <MenuItem iconProps="Following" color="#000000" size="27" />
             <MenuItem iconProps="LIVE" color="#000000" size="27" />
         </div>
+
+        <!-- ! SUGASTET ACCOUNT -->
+        <div class="border-b lg:ml-2 mt-2" />
+
+        <div class="lg:block hidden text-xs text-gray-600 font-semibold pt-4 pb-2 px-2">
+            Suggested accounts
+        </div>
+
+        <div class="lg:hidden block pt-3" />
+
+        <div>
+            <div @click="isLoggedIn(sug)" class="cursor-pointer">
+                <MenuItemFollow :user="sug" />
+            </div>
+        </div>
+
+        <button class="lg:block hidden text-[#F02C56] pt-1.5 pl-2 text-[13px]">
+            See all
+        </button>
+
+        <!-- ! FOLLOWING ACCOUNT -->
+        <div>
+            <div class="border-b lg:ml-2 mt-2" />
+
+            <div class="lg:block hidden text-xs text-gray-600 font-semibold pt-4 pb-2 px-2">
+                Following accounts
+            </div>
+
+            <div class="lg:hidden block pt-3" />
+
+            <div>
+                <div @click="isLoggedIn(fol)" class="cursor-pointer">
+                    <MenuItemFollow :user="fol" />
+                </div>
+            </div>
+
+            <button class="lg:block hidden text-[#F02C56] pt-1.5 pl-2 text-[13px]">See more</button>
+
+        </div>
+        <!-- ! FOLLOWING END ACCOUNT -->
+
+
+        <div class="lg:block hidden border-b lg:ml-2 mt-2" />
+
+        <div class="lg:block hidden text-[11px] text-gray-500">
+            <div class="pt-4 px-2">About Newsroom TikTok Shop Contact Careers ByteDance</div>
+            <div class="pt-4 px-2">TikTok for Good Advertise Developers Transparency TikTok Rewards TikTok Browse TikTok
+                Embeds</div>
+            <div class="pt-4 px-2">Help Safety Terms Privacy Creator Portal Community Guidelines</div>
+            <div class="pt-4 px-2">© 2023 TikTok</div>
+        </div>
+
+        <div class="pb-14"></div>
     </div>
 </template>
 
 <script setup>
-    const route = useRoute();
+const route = useRoute();
 </script>
