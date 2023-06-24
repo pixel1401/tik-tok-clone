@@ -1,4 +1,5 @@
 <template>
+    <UploadError :error-type-props="errorType" />
     <UploadLayout>
         <div class="w-full  mb-[40px] bg-white shadow-lg rounded-md py-6 md:px-10 px-4">
             <div>
@@ -74,8 +75,8 @@
                     </div>
                 </div>
 
-
-                <div class="mt-4 mb-6">
+                <!-- ! INFO  -->
+                <div class="mt-4 mb-6 flex flex-col justify-between">
                     <div class="flex bg-[#F8F8F8] py-4 px-6">
                         <div>
                             <Icon class="mr-4" size="20" name="mdi:box-cutter-off" />
@@ -92,23 +93,19 @@
                                 Edit
                             </button>
                         </div>
-                    </div>
+                    </div> 
 
-                    <div class="mt-5">
+                    <div class="my-5 flex-1">
                         <div class="flex items-center justify-between">
                             <div class="mb-1 text-[15px]">Caption</div>
                             <div class="text-gray-400 text-[12px]">{{ caption.length }}/150</div>
                         </div>
-                        
-                        <input 
-                        v-model="caption"
-                        maxlength="150" type="text" class="
-                                w-full
+                        <textarea v-model="caption"  maxlength="150" class="w-full
                                 border
                                 p-2.5
                                 rounded-md
-                                focus:outline-none
-                            ">
+                                h-[100%]
+                                focus:outline-none"></textarea>
                     </div>
 
                     <div class="flex gap-3">
@@ -139,18 +136,17 @@
 </template>
 
 <script  lang="ts">
-import { InputFiles } from "typescript";
 import { defineComponent, PropType } from "vue"
 import UploadLayout from "~/layouts/UploadLayout.vue";
 
 export default defineComponent({
     components: {
-        UploadLayout
+        UploadLayout,
     },
     data() {
         let file = ref<File | null>(null);
         let fileDisplay = ref('');
-        let errorType = ref(null);
+        let errorType = ref('');
         let caption = ref('');
         let fileData = ref(null);
         let errors = ref(null);
@@ -193,6 +189,16 @@ export default defineComponent({
             this.caption = '';
 
         },
+    },
+
+    watch: {
+        caption (newVal , oldVal) {
+            if(this.caption.length >=150) {
+                this.errorType = 'caption';
+                return
+            }
+            this.errorType = '';
+        }
     }
 
 });
