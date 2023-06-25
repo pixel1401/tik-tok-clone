@@ -1,5 +1,4 @@
 <template>
-    <div class="h-50 bg-cyan-950">
         <!-- <NuxtLink  to="https://nuxtjs.org"> -->
         <!-- <img src='~/assets/images/tiktok-logo.png' /> -->
         <!-- </NuxtLink> -->
@@ -13,7 +12,6 @@
 
         </div>
 
-    </div>
 </template>
 
 <script setup>
