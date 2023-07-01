@@ -7,7 +7,6 @@
 
             <div class="w-full flex justify-end">
                 <button 
-                    
                     class="p-1.5 rounded-full bg-gray-100"
                 >
                     <Icon name="mdi:close" size="26"/>
@@ -32,6 +31,11 @@
     </div>
 </template>
 
-<script setup>
-let isRegister = ref(true)
+<script setup lang="ts">
+let isRegister = ref(true);
+const {$generalStore} = useNuxtApp();
+
+
+
+
 </script>
