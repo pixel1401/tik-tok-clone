@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "Nuxt",
         "pinia"
     ],
     "typescript.tsdk": "node_modules/typescript/lib"

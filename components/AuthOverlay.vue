@@ -7,6 +7,7 @@
 
             <div class="w-full flex justify-end">
                 <button 
+                @click="$generalStore.isLoginOpen = false"
                     class="p-1.5 rounded-full bg-gray-100"
                 >
                     <Icon name="mdi:close" size="26"/>

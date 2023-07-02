@@ -3,6 +3,7 @@
     <!-- <NuxtWelcome /> -->
     <NuxtPage />
     <AuthOverlay v-if="isShow"/>
+    <EditProfileOverlay/>
   </div>
 </template>
 
