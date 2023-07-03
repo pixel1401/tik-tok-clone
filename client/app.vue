@@ -3,7 +3,7 @@
     <!-- <NuxtWelcome /> -->
     <NuxtPage />
     <AuthOverlay v-if="isShow"/>
-    <EditProfileOverlay/>
+    <EditProfileOverlay v-if="isEditProfileOpen" />
   </div>
 </template>
 
@@ -12,5 +12,5 @@
   import { storeToRefs } from 'pinia';
   const {$generalStore} = useNuxtApp();
 
-  const {isLoginOpen : isShow} = storeToRefs($generalStore);
+  const {isLoginOpen : isShow , isEditProfileOpen} = storeToRefs($generalStore);
 </script>
