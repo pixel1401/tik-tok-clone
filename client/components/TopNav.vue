@@ -51,6 +51,7 @@
                                 <Icon name="ph:user" size="20" />
                                 <span class="pl-2 font-semibold text-sm">Profile</span>
                             </NuxtLink>
+                            <!-- ! LOG OUT -->
                             <div @click="logout()"
                                 class="flex items-center justify-start py-3 px-1.5 hover:bg-gray-100 border-t cursor-pointer">
                                 <Icon name="ic:outline-login" size="20" />
@@ -91,19 +92,20 @@ onMounted(() => {
 })
 
 const isLoggedIn = () => {
-    // if ($userStore.id) {
-    //     router.push('/upload')
-    // } else {
-    //     $generalStore.isLoginOpen = true
-    // }
+    if ($userStore.id) {
+        router.push('/upload')
+    } else {
+        $generalStore.isLoginOpen = true
+    }
 }
 
-const logout = () => {
+const logout = async () => {
     try {
-        // $userStore.logout()
-        router.push('/')
+
+        await $userStore.logout();
+        router.push('/');
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 </script>
