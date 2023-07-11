@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UsersCollection;
 use App\Models\User;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -33,7 +34,9 @@ class UserController extends Controller
         }
 
         try {
-            
+            $user = (new FileService)->updateImage(auth()->user() , $request);
+            $user->save();
+            return response()->json(['success' => 'OK']);
         } catch (\Exception $th) {
             return response()->json(['error'=> $th->getMessage()]);
         }
@@ -42,9 +45,14 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function getUser($id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            return response()->json(['success' => "OK" , 'user' => $user ]);
+        } catch (\Exception $th) {
+            return response()->json(['error'=> $th->getMessage()]);
+        }
     }
 
     /**
