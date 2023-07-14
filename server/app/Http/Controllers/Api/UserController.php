@@ -55,20 +55,24 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateUser(Request $request)
     {
-        //
+        $request->validate(["name" => "required"]);
+
+        try {
+            $user = User::findOrFail(auth()->user()->id);
+            $user->name = $request->input('name');
+            $user->bio = $request->input('bio');
+            $user->save();
+            return response()->json(['success' => "OK" , 'user' => $user]);
+        } catch (\Exception $th) {
+            return response()->json(['error' => $th->getMessage()]);
+        }
     }
 
     /**
