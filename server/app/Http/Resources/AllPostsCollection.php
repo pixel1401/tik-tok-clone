@@ -30,7 +30,7 @@ class AllPostsCollection extends ResourceCollection
                         'name' => $comment->user->name,
                         'image' => url('/') . $comment->user->image,
                     ]
-                    ];
+                ];
               }),
               'likes' => $post->likes->map(function ($like) {
                 return [

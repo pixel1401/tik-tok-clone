@@ -1,5 +1,10 @@
 <template>
     <UploadError :error-type-props="errorType" />
+    <div v-if="isUploading"
+        class="fixed flex items-center justify-center top-0 left-0 w-full h-screen bg-black z-50 bg-opacity-50">
+        <Icon class="animate-spin ml-1" name="mingcute:loading-line" size="100" color="#FFFFFF" />
+    </div>
+
     <UploadLayout>
         <div class="w-full  mb-[40px] bg-white shadow-lg rounded-md py-6 md:px-10 px-4">
             <div>
@@ -93,14 +98,14 @@
                                 Edit
                             </button>
                         </div>
-                    </div> 
+                    </div>
 
                     <div class="my-5 flex-1">
                         <div class="flex items-center justify-between">
                             <div class="mb-1 text-[15px]">Caption</div>
                             <div class="text-gray-400 text-[12px]">{{ caption.length }}/150</div>
                         </div>
-                        <textarea v-model="caption"  maxlength="150" class="w-full
+                        <textarea v-model="caption" maxlength="150" class="w-full
                                 border
                                 p-2.5
                                 rounded-md
@@ -119,14 +124,14 @@
                         </button>
                     </div>
 
-                    <!-- <div v-if="errors" class="mt-4">
+                    <div v-if="errors" class="mt-4">
                         <div class="text-red-600" v-if="errors && errors.video">
-                            error video
+                            {{ errors.video[0] }}
                         </div>
                         <div class="text-red-600" v-if="errors && errors.text">
-                            error text
+                            {{ errors.text[0] }}
                         </div>
-                    </div> -->
+                    </div>
 
                 </div>
 
@@ -139,7 +144,15 @@
 import { defineComponent, PropType } from "vue"
 import UploadLayout from "~/layouts/UploadLayout.vue";
 
+
 export default defineComponent({
+
+    setup() {
+        const { $axios, $userStore } = useNuxtApp();
+
+        return { $axios, $userStore }
+    },
+
     components: {
         UploadLayout,
     },
@@ -149,15 +162,33 @@ export default defineComponent({
         let errorType = ref('');
         let caption = ref('');
         let fileData = ref(null);
-        let errors = ref(null);
-        let isUploading = ref(null);
+        let errors = ref<{ video?: string, text?: string } | null>(null);
+        let isUploading = ref<boolean | null>(null);
 
         return { file, fileDisplay, errorType, caption, fileData, errors, isUploading }
     },
     methods: {
+        async createPost() {
+            this.errors = null;
+            try {
+                this.isUploading = true;
+                let formData = new FormData;
+                formData.append('video', this.file as Blob);
+                formData.append('text', this.caption);
+                let result = await this.$userStore.createPost(formData);
 
-        createPost() {
+                if(result.status == 200) {
+                    setTimeout(() => {
+                        this.$router.push('/profile/' + this.$userStore.id);
+                    }, 400);
+                }
 
+            } catch (error: any) {
+                this.errors = error.response.data.errors;
+                return error;
+            } finally {
+                this.isUploading = false;
+            }
         },
         onChange(event: Event) {
             let video = (event.target as HTMLInputElement)?.files?.[0];
@@ -192,8 +223,8 @@ export default defineComponent({
     },
 
     watch: {
-        caption (newVal , oldVal) {
-            if(this.caption.length >=150) {
+        caption(newVal, oldVal) {
+            if (this.caption.length >= 150) {
                 this.errorType = 'caption';
                 return
             }

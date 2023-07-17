@@ -6,14 +6,15 @@
         >
             <div class="flex w-[calc(100vw-230px)]">
                 <img 
-                    class="max-w-[120px] rounded-full" 
-                    src="https://picsum.photos/id/8/300/320"
+                    class="max-w-[120px] rounded-full"
+                    :src="image"
+                    
                 >
                 <div class="ml-5 w-full">
                     <div class="text-[30px] font-bold truncate">
-                        User Name
+                       {{ name }}
                     </div>
-                    <div class="text-[18px] truncate">User Name</div>
+                    <div class="text-[18px] truncate">{{ bio }}</div>
                     <button 
                         v-if="true"
                         @click="$generalStore.isEditProfileOpen = true"
@@ -69,11 +70,20 @@
 </template>
 
 <script  setup lang="ts">
+import { storeToRefs } from 'pinia';
+
 // import { defineComponent } from 'vue';
-    
-const {$generalStore} = useNuxtApp();
 
+const route = useRoute();
+const {$generalStore , $profileStore} = useNuxtApp();
 
+const {name , id , image , bio} = storeToRefs($profileStore)
+
+onMounted(() => {
+    if(route.params.id) {
+        $profileStore.getProfile(route.params.id as string);
+    }
+})
 
 // export default defineComponent({
 //     layout: "default",

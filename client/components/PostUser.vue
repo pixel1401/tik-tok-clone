@@ -24,6 +24,9 @@
 <script lang="ts" setup>
 const isLoaded = ref(false);
 const video = ref<HTMLVideoElement | null>(null)
+
+
+
 onMounted(()=> {
         video.value?.addEventListener("loadeddata" , (e) => {
             if(e.target) {
