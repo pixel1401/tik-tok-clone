@@ -1,6 +1,8 @@
 export default interface IUser {
-    id?  : string,
-    name? : string,
-    bio? : string ,
-    image? : string,
+    id?: number
+    name?: string
+    bio?: string
+    image?: string,
+    created_at?: string
+    updated_at?: string
 }

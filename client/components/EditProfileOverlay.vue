@@ -123,7 +123,7 @@ import 'vue-advanced-cropper/dist/style.css';
 
 import { storeToRefs } from 'pinia';
 const { $userStore, $generalStore, $profileStore } = useNuxtApp()
-const { name, bio, image } = storeToRefs($userStore)
+const { name, bio, image } = storeToRefs($profileStore)
 
 const route = useRoute()
 
@@ -135,9 +135,9 @@ onMounted(() => {
 
 let file = ref<File | null>(null)
 let cropper = ref<  any | null>(null)
-let uploadedImage = ref<String | null>('')
+let uploadedImage = ref<string | null>('')
 let userImage = ref('')
-let userName = ref<String| null>(null)
+let userName = ref<string| null>(null)
 let userBio = ref('')
 let isUpdated = ref(false)
 
@@ -157,16 +157,11 @@ const cropAndUpdateImage = async () => {
     data.append('left', coordinates.left.toString() || '')
     data.append('top', coordinates.top.toString() || '')
 
-    console.log(cropper.value);
+    console.log(cropper.value , 'Cropper value');
     
 
     try {
-        // await $userStore.updateUserImage(data)
-        // await $userStore.getUser()
-        // await $profileStore.getProfile(route.params.id)
-
-        // $generalStore.updateSideMenuImage($generalStore.suggested, $userStore)
-        // $generalStore.updateSideMenuImage($generalStore.following, $userStore)
+        $profileStore.updateUserImage(data);
 
         userImage.value = uploadedImage.value?.toString() ?? '';
         console.log(uploadedImage.value);
@@ -179,11 +174,7 @@ const cropAndUpdateImage = async () => {
 
 const updateUserInfo = async () => {
     try {
-       
-
-        userName.value = name?.value ?? null
-        userBio.value = bio?.value ?? ''
-
+        await $profileStore.updateUser(userName.value ?? '' , userBio.value );
         setTimeout(() => {
             $generalStore.isEditProfileOpen = false
         }, 100)

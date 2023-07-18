@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AllPostsCollection;
 use App\Http\Resources\UsersCollection;
 use App\Models\User;
 use App\Services\FileService;
@@ -36,7 +37,7 @@ class UserController extends Controller
         try {
             $user = (new FileService)->updateImage(auth()->user() , $request);
             $user->save();
-            return response()->json(['success' => 'OK']);
+            return response()->json(['success' => 'OK' , 'user'=> new UsersCollection([$user])]);
         } catch (\Exception $th) {
             return response()->json(['error'=> $th->getMessage()]);
         }
@@ -65,11 +66,11 @@ class UserController extends Controller
         $request->validate(["name" => "required"]);
 
         try {
-            $user = User::findOrFail(auth()->user()->id);
+            $user = User::query()->findOrFail(auth()->user()->id);
             $user->name = $request->input('name');
             $user->bio = $request->input('bio');
             $user->save();
-            return response()->json(['success' => "OK" , 'user' => $user]);
+            return response()->json(['success' => "OK" , 'user' => new UsersCollection([$user])]);
         } catch (\Exception $th) {
             return response()->json(['error' => $th->getMessage()]);
         }

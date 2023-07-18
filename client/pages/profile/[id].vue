@@ -49,7 +49,7 @@
             </div>
 
             <div class="pt-4 mr-4 text-gray-500 font-light text-[15px] pl-1.5 max-w-[500px]">
-                My Bio
+                {{ bio }}
             </div>
 
             <div class="w-full flex items-center pt-4 border-b">
@@ -60,8 +60,8 @@
             </div>
 
             <div class="mt-4 grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
-                <div v-if="true" >
-                    <PostUser/>
+                <div v-if="$profileStore.posts?.length ?? 0 > 0" >
+                    <PostUser v-for="post in $profileStore.posts" :link="post.video" :text="post.text" :id="post.id"  :key="post.id"/>
                 </div>
             </div>
         </div> 

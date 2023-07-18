@@ -6,7 +6,7 @@ import axios from "~/plugins/axios";
 import { useUserStore } from "./user";
 
 
-const $axios  = (axios({} as NuxtApp) as { provide: { axios: AxiosStatic } }).provide.axios;
+const $axios = (axios({} as NuxtApp) as { provide: { axios: AxiosStatic } }).provide.axios;
 
 export const useGeneralStore = defineStore('general', {
     state: (): IGeneral => ({
@@ -22,18 +22,22 @@ export const useGeneralStore = defineStore('general', {
 
     actions: {
 
-        bodySwitch(val : boolean) {
-            if(val) {
+        bodySwitch(val: boolean) {
+            if (val) {
                 document.body.style.overflow = 'hidden';
-            }else {
+            } else {
                 document.body.style.overflow = 'visible';
             }
         },
 
-        async       hasSessionExpired() {
+        setBackUrl(value: string) {
+            this.isBackUrl = value;
+        },
+
+        async hasSessionExpired() {
             $axios.interceptors.request.use((req) => {
                 return req;
-            } , (error) => {
+            }, (error) => {
                 switch (error.response.status) {
                     case 401: // Not logged in 
                     case 419: // Session expired 
@@ -42,7 +46,7 @@ export const useGeneralStore = defineStore('general', {
                         useUserStore().resetUser();
                         window.location.href = '/';
                         break;
-                    case 500 :
+                    case 500:
                         alert("OOPS , something went wrong! Erzhan has been notified");
                         break;
                     default:
@@ -50,6 +54,17 @@ export const useGeneralStore = defineStore('general', {
                         break;
                 }
             })
+        },
+
+        async getRandomUser () {
+            try {
+                let res = await $axios.get('/api/get-random-users');
+            this.suggested = res.data.suggested;
+            this.following = res.data.following;    
+            } catch (error) {
+                
+            }
+            
         }
 
     },

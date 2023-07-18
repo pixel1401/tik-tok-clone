@@ -27,7 +27,7 @@ Route::get('/home' , [HomeController::class , 'index']);
 Route::middleware(['auth:sanctum'])->group( function () {
     // USER
     Route::get('/logged-in-user', [UserController::class , 'loggedInUser']);
-    Route::get('/update-user-image', [UserController::class , 'updateUserImage']);
+    Route::post('/update-user-image', [UserController::class , 'updateUserImage']);
     Route::patch('/update-user', [UserController::class , 'updateUser']);
 
     // POST
