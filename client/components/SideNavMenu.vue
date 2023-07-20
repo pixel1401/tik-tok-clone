@@ -9,7 +9,7 @@
             <MenuItem iconProps="LIVE" color="#000000" size="27" />
         </div>
 
-        <!-- ! SUGASTET ACCOUNT -->
+        <!-- ! SUGGESTED ACCOUNT -->
         <div class="border-b lg:ml-2 mt-2" />
 
         <div class="lg:block hidden text-xs text-gray-600 font-semibold pt-4 pb-2 px-2">
@@ -18,9 +18,9 @@
 
         <div class="lg:hidden block pt-3" />
 
-        <div>
-            <div @click="isLoggedIn(sug)" class="cursor-pointer">
-                <MenuItemFollow :user="sug" />
+        <div v-if="$generalStore.suggested?.length ?? 0 > 0">
+            <div v-for="user in $generalStore.suggested" :key="user.id"  @click="isLoggedIn(user)" class="cursor-pointer">
+                <MenuItemFollow :id="user.id" :name="user.name" :img="user.image" />
             </div>
         </div>
 
@@ -38,9 +38,9 @@
 
             <div class="lg:hidden block pt-3" />
 
-            <div>
-                <div @click="isLoggedIn(fol)" class="cursor-pointer">
-                    <MenuItemFollow :user="fol" />
+            <div v-if="$generalStore.following?.length ?? 0 > 0">
+                <div v-for="user in $generalStore.following" :key="user.id" @click="isLoggedIn(user)" class="cursor-pointer">
+                    <MenuItemFollow :id="user.id" :name="user.name" :img="user.image" />
                 </div>
             </div>
 
@@ -64,6 +64,23 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts" >
+import IUser from '~/models/IUser';
 const route = useRoute();
+const router = useRouter();
+
+
+const {$generalStore , $userStore} = useNuxtApp();
+
+
+
+const isLoggedIn = (user : IUser ) => {
+    if(!$userStore.id) {
+        $generalStore.isLoginOpen = true;
+        return;
+    }
+
+    router.push(`/profile/${user?.id ?? '1'}`);
+}
+
 </script>

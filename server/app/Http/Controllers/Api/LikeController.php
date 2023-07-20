@@ -46,10 +46,10 @@ class LikeController extends Controller
     public function destroy(string $id)
     {
         try {
-            $like = Like::query()->find($id);
+            $like = Like::find($id);
             $like->delete();
 
-            return response()->json(['like' => ['id' => $like->id, 'user_id' => $like->user_id, 'post_id' => $like->post_id]]);
+            return response()->json(['success' => 'ok' , 'user_id' => auth()->user()->id ]);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()] , 400);
             

@@ -22,10 +22,9 @@
 
     try {
       await $generalStore.hasSessionExpired();
-
-      if($userStore.id) {
-        await $userStore.getUser();
-      }
+      await $userStore.getUser();
+      await $generalStore.getRandomUser();
+      
 
     } catch (error) {
       console.log(error);

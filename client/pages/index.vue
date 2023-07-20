@@ -2,13 +2,7 @@
     <NuxtLayout>
         <div class="pt-[80px] w-[calc(100%-90px)] max-w-[690px]">
             <div >
-                <PostMain  />
-                <PostMain  />
-                <PostMain  />
-                <PostMain  />
-                <PostMain  />
-                <PostMain  />
-                <PostMain  />
+                <PostMain  v-for="post in $generalStore.posts" :post="post" />
             </div>
         </div>
         
@@ -16,6 +10,12 @@
     
 </template>
 
-<script setup>
+<script setup lang="ts">
+
+    const {$generalStore} = useNuxtApp();
+
+    onMounted( async ()=> {
+        await $generalStore.getPosts();
+    })
 
 </script>

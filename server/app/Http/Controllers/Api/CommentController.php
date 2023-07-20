@@ -23,7 +23,7 @@ class CommentController extends Controller
             $comment->text = $request->input('comment');
 
             $comment->save();
-            return response()->json(['success' => 'Ok']);
+            return response()->json(['success' => 'Ok' , 'comment' => $comment]);
         } catch (\Throwable $th) {
             return response()->json(['error'=> $th->getMessage() , 400]);
         }

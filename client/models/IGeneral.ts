@@ -1,10 +1,13 @@
+import IPost from "./IPost";
+import IUser from "./IUser";
+
 export default interface IGeneral {
     isLoginOpen : boolean,
     isEditProfileOpen : boolean,
-    selectedPost? : [],
-    ids? : string,
+    selectedPost? : IPost,
+    ids? : number[],
     isBackUrl : string,
-    posts?: [],
-    suggested? : string,
-    following? : string
+    posts?: IPost[],
+    suggested? : IUser[] ,
+    following? : IUser[] 
 }

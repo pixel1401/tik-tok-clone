@@ -59,7 +59,7 @@ class PostController extends Controller
                 return $post->id;
             });
 
-            return response()->json(['post' => new AllPostsCollection($post) , "ids"=> $ids]);
+            return response()->json(['post' => new AllPostsCollection([$post]) , "ids"=> $ids]);
         } catch (\Exception $th) {
             return response()->json(['error' => $th->getMessage()] , 400);
         }
@@ -77,7 +77,7 @@ class PostController extends Controller
             if(!is_null($post->video) && file_exists(public_path() . $post->video) ) {
                 unlink(public_path() . $post->video);
             }
-
+            $post->delete();
             return response()->json(['success' => "ok"]);
         } catch (\Exception $th) {
             return response()->json(['error' => $th->getMessage() ] , 400);

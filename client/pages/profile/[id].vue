@@ -12,11 +12,11 @@
                 >
                 <div class="ml-5 w-full">
                     <div class="text-[30px] font-bold truncate">
-                       {{ name }}
+                       {{ $generalStore.allLowerCaseNoCaps(name ?? '') }}
                     </div>
-                    <div class="text-[18px] truncate">{{ bio }}</div>
+                    <div class="text-[18px] truncate">{{ name }}</div>
                     <button 
-                        v-if="true"
+                        v-if="isOwnerProfile"
                         @click="$generalStore.isEditProfileOpen = true"
                         class="flex item-center rounded-md py-1.5 px-3.5 mt-3 text-[15px] font-semibold border hover:bg-gray-100"
                     >
@@ -72,21 +72,19 @@
 <script  setup lang="ts">
 import { storeToRefs } from 'pinia';
 
-// import { defineComponent } from 'vue';
+let isOwnerProfile = ref<boolean>(false);
+
 
 const route = useRoute();
-const {$generalStore , $profileStore} = useNuxtApp();
+const {$generalStore , $profileStore , $userStore} = useNuxtApp();
 
 const {name , id , image , bio} = storeToRefs($profileStore)
 
-onMounted(() => {
+onMounted( async () => {
     if(route.params.id) {
-        $profileStore.getProfile(route.params.id as string);
+        await $profileStore.getProfile(route.params.id as string);
+        isOwnerProfile.value = $userStore.id == $profileStore.id;
     }
 })
 
-// export default defineComponent({
-//     layout: "default",
-
-// });
 </script>

@@ -42,8 +42,8 @@ class ProfileController extends Controller
     {
         try {
             $posts = Post::where('user_id' , $id)->orderBy('created_at' , 'desc')->get();
-            $user = User::find($id)->get();
-            return response()->json(['user' => new UsersCollection($user) , 'posts'=> new AllPostsCollection($posts)]);
+            $user = User::find($id);
+            return response()->json(['user' => new UsersCollection([$user]) , 'posts'=> new AllPostsCollection($posts)]);
         } catch (\Exception $th) {
             return response()->json(["error" => $th->getMessage()] , 400);
         }

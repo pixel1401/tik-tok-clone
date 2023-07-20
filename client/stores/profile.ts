@@ -20,7 +20,7 @@ export const useProfileStore = defineStore('profile', {
     }),
 
     actions: {
-        async getProfile(id: string) {
+        async   getProfile(id: string) {
             try {
                 let data = await $axios.get(`api/profiles/${id}`);
 
