@@ -1,3 +1,4 @@
+import { throws } from "assert";
 import { AxiosStatic } from "axios";
 import { NuxtApp } from "nuxt/app";
 import IUser from "~/models/IUser"
@@ -11,7 +12,8 @@ export const useUserStore = defineStore('user', {
         id: undefined,
         name: undefined,
         bio: undefined,
-        image: undefined
+        image: undefined,
+        follows : []
     }),
 
     actions: {
@@ -47,9 +49,33 @@ export const useUserStore = defineStore('user', {
 
         },
 
+        async followUser (follow_id : number) {
+            try {
+                let res = await $axios.post('/api/follow' , {
+                    follow_id
+                });
+                if(res.status !=200 ) throws;
+                this.follows?.push(res.data.follow);
+            } catch (error) {
+                
+            }
+        },
+
+        async deleteFollow (id : number) {
+            try {
+                let res = await $axios.delete(`/api/${id}`);
+                if(res.status !=200 ) throws;
+                this.follows = this.follows?.filter(follow => follow.id != id);
+            } catch (error) {
+                
+            }
+        },
+
+
         async createPost(data: FormData) {
             return await $axios.post('/api/posts', data);
         },
+
 
         async logout() {
             await $axios.post('/logout');
@@ -63,6 +89,7 @@ export const useUserStore = defineStore('user', {
                 this.$state.name = undefined,
                 this.$state.image = undefined,
                 this.$state.id = undefined;
+                this.$state.follows = undefined;
         },
 
         setUser(dataUser: IUser) {
@@ -70,6 +97,7 @@ export const useUserStore = defineStore('user', {
             this.$state.bio = dataUser.bio;
             this.$state.name = dataUser.name;
             this.$state.image = dataUser.image;
+            this.$state.follows = dataUser.follows
         },
 
         isLoggedIn(user: IUser) {

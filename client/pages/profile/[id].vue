@@ -2,16 +2,16 @@
     <NuxtLayout>
         <div 
             v-if="true" 
-            class="pt-[90px] 2xl:pl-[185px] lg:pl-[160px] lg:pr-0 pr-2 w-[calc(100%-90px)] max-w-[1800px] 2xl:mx-auto"
+            class="pt-[90px] 2xl:pl-[240px] lg:pl-[190px] w-[calc(100%-90px)] lg:pr-0 pr-2   2xl:mx-auto"
         >
-            <div class="flex w-[calc(100vw-230px)]">
+            <div class="flex overflow-hidden">
                 <img 
-                    class="max-w-[120px] rounded-full"
+                    class="md:max-w-[120px] md:max-h-[120px] max-w-[80px] max-h-[80px] aspect-square rounded-full"
                     :src="image"
                     
                 >
                 <div class="ml-5 w-full">
-                    <div class="text-[30px] font-bold truncate">
+                    <div class="md:text-[30px] text-[20px] font-bold truncate overflow-hidden md:max-w-max max-w-[100px]">
                        {{ $generalStore.allLowerCaseNoCaps(name ?? '') }}
                     </div>
                     <div class="text-[18px] truncate">{{ name }}</div>
@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center pt-4">
+            <div class="flex items-center pt-4 flex-wrap md:flex-nowrap">
                 <div class="mr-4">
                     <span class="font-bold">10K</span>
                     <span class="text-gray-500 font-light text-[15px] pl-1.5">Following</span>
@@ -59,10 +59,8 @@
                 </div>
             </div>
 
-            <div class="mt-4 grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
-                <div v-if="$profileStore.posts?.length ?? 0 > 0" >
+            <div v-if="$profileStore.posts?.length ?? 0 > 0"  class="mt-4 grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
                     <PostUser v-for="post in $profileStore.posts" :link="post.video" :text="post.text" :id="post.id"  :key="post.id"/>
-                </div>
             </div>
         </div> 
     </NuxtLayout >

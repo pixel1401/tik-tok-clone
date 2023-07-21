@@ -15,6 +15,7 @@
                 </button>
 
                 <button
+                    @click="isFollow ? unFollow() : followUser(props.post.user.id ?? 0)"
                     class="border text-[15px] px-[21px] py-0.5 border-[#F02C56] text-[#F02C56] hover:bg-[#ffeef2] font-semibold rounded-md">
                     Follow
                 </button>
@@ -86,10 +87,10 @@ const props = defineProps({
 onMounted(() => {
     let observer = new IntersectionObserver(function (entries) {
         if (entries[0].isIntersecting) {
-            console.log('Element playing ' + props.post.id);
+            // console.log('Element playing ' + props.post.id);
             video.value?.play();
         } else {
-            console.log('Element paused ' + props.post.id);
+            // console.log('Element paused ' + props.post.id);
             video.value?.pause();
         }
     }, { threshold: [0.6] });
@@ -143,4 +144,21 @@ const displayPost = (post: IPost) => {
     $generalStore.selectedPost = undefined;
     router.push(`/post/${post.id}`);
 }
+
+
+// FOLLOW USER OR UN FOLLOW
+const isFollow = computed(() => {
+    let res = $userStore?.follows?.find(follow => follow.user_id == $userStore.id);
+    return res ? true : false;
+})
+
+const followUser = (follow_id : number) => {
+    $userStore.followUser(follow_id);
+}
+
+const unFollow = () => {
+    
+    $userStore.deleteFollow(id);
+}
+
 </script>

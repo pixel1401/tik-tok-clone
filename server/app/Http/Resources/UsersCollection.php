@@ -20,6 +20,13 @@ class UsersCollection extends ResourceCollection
                 'name' => $user->name,
                 'bio' => $user->bio,
                 'image' => url('/') . $user->image,
+                'follows' => $user->follows->map(function ($follow) {
+                    return [
+                        'id'=> $follow->id,
+                        'user_id'=> $follow->user_id,
+                        'follow_id'=> $follow->follow_id,
+                    ];
+                }),
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
             ];

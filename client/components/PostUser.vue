@@ -13,7 +13,7 @@
         </div>
         <div class="px-1">
             <div class="text-gray-700 text-[15px] pt-1 break-words">
-                Posts text
+                {{ text }}
             </div>
             <div class="flex items-center -ml-1 text-gray-600 font-bold text-xs">
                 <Icon name="gg:loadbar-sound" size="20" />

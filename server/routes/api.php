@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\GlobalController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\LikeController;
@@ -46,4 +47,7 @@ Route::middleware(['auth:sanctum'])->group( function () {
     Route::post('/likes' , [LikeController::class , 'store']);
     Route::delete('/likes/{id}' , [LikeController::class , 'destroy']);
 
-});
+    // FOLLOW
+    Route::post('/follow' , [FollowController::class , 'store']);
+    Route::delete('/follow{id}' , [FollowController::class , 'destroy']);
+}); 
