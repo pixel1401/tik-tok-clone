@@ -44,9 +44,9 @@ export const useGeneralStore = defineStore('general', {
                 return req;
             }, (error) => {
                 switch (error.response.status) {
-                    case 401: // Not logged in 
-                    case 419: // Session expired 
-                    case 503: // Down for maintenance
+                    // case 401: // Not logged in 
+                    // case 419: // Session expired 
+                    // case 503: // Down for maintenance
                     case 503: // Down for maintenance
                         useUserStore().resetUser();
                         window.location.href = '/';
@@ -56,7 +56,6 @@ export const useGeneralStore = defineStore('general', {
                         break;
                     default:
                         return Promise.reject(error);
-                        break;
                 }
             })
         },

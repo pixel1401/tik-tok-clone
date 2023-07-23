@@ -1,4 +1,3 @@
-import { throws } from "assert";
 import { AxiosStatic } from "axios";
 import { NuxtApp } from "nuxt/app";
 import IUser from "~/models/IUser"
@@ -54,7 +53,7 @@ export const useUserStore = defineStore('user', {
                 let res = await $axios.post('/api/follow' , {
                     follow_id
                 });
-                if(res.status !=200 ) throws;
+                if(res.status !=200 ) return ;
                 this.follows?.push(res.data.follow);
             } catch (error) {
                 
@@ -63,8 +62,8 @@ export const useUserStore = defineStore('user', {
 
         async deleteFollow (id : number) {
             try {
-                let res = await $axios.delete(`/api/${id}`);
-                if(res.status !=200 ) throws;
+                let res = await $axios.delete(`/api/follow/${id}`);
+                if(res.status !=200 ) return ;
                 this.follows = this.follows?.filter(follow => follow.id != id);
             } catch (error) {
                 

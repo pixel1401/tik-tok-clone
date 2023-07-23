@@ -49,5 +49,5 @@ Route::middleware(['auth:sanctum'])->group( function () {
 
     // FOLLOW
     Route::post('/follow' , [FollowController::class , 'store']);
-    Route::delete('/follow{id}' , [FollowController::class , 'destroy']);
+    Route::delete('/follow/{id}' , [FollowController::class , 'destroy']);
 }); 

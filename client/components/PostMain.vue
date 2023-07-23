@@ -13,12 +13,16 @@
                         {{ props.post.user?.name ?? '' }}
                     </span>
                 </button>
-
-                <button
+                <div
+                    v-if="props.post.user.id != $userStore.id "    
+                >
+                    <button
                     @click="isFollow ? unFollow() : followUser(props.post.user.id ?? 0)"
                     class="border text-[15px] px-[21px] py-0.5 border-[#F02C56] text-[#F02C56] hover:bg-[#ffeef2] font-semibold rounded-md">
-                    Follow
+                    {{ isFollow ? 'UnFollow' : 'Follow'}}
                 </button>
+                </div>
+                
             </div>
             <div class="text-[15px] pb-0.5 break-words md:max-w-[400px] max-w-[300px]">{{ props.post.text }}</div>
             <!-- <div class="text-[14px] text-gray-500 pb-0.5">#fun #cool #SuperAwesome</div> -->
@@ -157,8 +161,11 @@ const followUser = (follow_id : number) => {
 }
 
 const unFollow = () => {
-    
-    $userStore.deleteFollow(id);
+    const isFollow = $userStore.follows?.find((follow) => follow.follow_id == props.post.user.id);
+
+    if(!isFollow) return;
+
+    $userStore.deleteFollow(isFollow.id);
 }
 
 </script>
