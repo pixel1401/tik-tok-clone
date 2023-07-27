@@ -84,7 +84,7 @@
             <div class="flex items-center px-8 mt-8">
                 <div class="pb-4 text-center flex items-center">
                     <button
-                    @click="isLiked ? unLikePost() : likePost()"
+                    @click="isLiked ? unlikePost(selectedPost as IPost) : likePost(selectedPost as IPost)"
                     class="rounded-full bg-gray-200 p-2 cursor-pointer">
                         <Icon name="mdi:heart" size="25" :color="isLiked ? '#F02C56' : ''" />
                     </button>
@@ -167,6 +167,8 @@ import {
     ref,
     watch,
 } from 'vue';
+import { useLike } from '~/hooks/useLike';
+import IPost, { ILikes } from '~/models/IPost';
 
 let video = ref<HTMLVideoElement | null>(null);
 let isLoaded = ref(false);
@@ -178,12 +180,21 @@ let isVideoMuted = ref<boolean>(video?.value?.muted ?? false);
 let isPauseVideo = ref<boolean>(video?.value?.paused ?? false);
 let isShowPlayOrPauseIconAnimation = ref<boolean>(false);
 
+let arrtest = ref<ILikes[]>([])
+
 const { $generalStore, $userStore } = useNuxtApp();
 const { selectedPost, ids } = storeToRefs($generalStore);
 
 
 const router = useRouter();
 const route = useRoute();
+
+
+
+
+const {isLiked , unlikePost , likePost } = useLike(selectedPost?.value?.likes ?? []);
+
+
 
 onMounted(async () => {
     $generalStore.selectedPost = undefined;
@@ -195,6 +206,8 @@ onMounted(async () => {
             console.log(selectedPost?.value?.user.id, $userStore.id);
 
             isOwnerPost.value = selectedPost?.value?.user.id == $userStore.id;
+            // setLikeArray(selectedPost?.value?.likes ?? []);
+
         } catch (error) {
             router.push('/');
         }
@@ -280,22 +293,22 @@ const deletePost = async () => {
     }
 }
 
-const isLiked = computed(() => {
-    let res = selectedPost?.value?.likes.find(like => like.user_id == $userStore.id);
-    return res ? true : false;
-})
+// const isLiked = computed(() => {
+//     let res = selectedPost?.value?.likes.find(like => like.user_id == $userStore.id);
+//     return res ? true : false;
+// })
 
-const likePost = () => {
+// const likePost = () => {
     
-    if(!selectedPost?.value?.id) return;
+//     if(!selectedPost?.value?.id) return;
     
-    $generalStore.likePost(selectedPost?.value?.id);
-}
+//     $generalStore.likePost(selectedPost?.value?.id);
+// }
 
-const unLikePost = () => {
-    if(!selectedPost?.value?.id) return;
-    let like = selectedPost.value.likes.find((like) => like.user_id == $userStore.id);
-    $generalStore.unlikePost(like?.id ?? -1 , selectedPost.value.id);
-}
+// const unLikePost = () => {
+//     if(!selectedPost?.value?.id) return;
+//     let like = selectedPost.value.likes.find((like) => like.user_id == $userStore.id);
+//     $generalStore.unlikePost(like?.id ?? -1 , selectedPost.value.id);
+// }
 
 </script>

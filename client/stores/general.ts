@@ -73,7 +73,6 @@ export const useGeneralStore = defineStore('general', {
         async getPosts () {
             try {
                 let res = await $axios.get('/api/home');
-                console.log(res.data.posts);
                 this.$state.posts = res.data.posts;
             } catch (error) {
                 
@@ -116,6 +115,9 @@ export const useGeneralStore = defineStore('general', {
                     }
                 }
 
+                console.log(this.posts);
+                
+
                 if(this.selectedPost && this.selectedPost.id == post_id) {
                     this.selectedPost.likes.push(newLikeData);
                 }
@@ -124,22 +126,32 @@ export const useGeneralStore = defineStore('general', {
                 
             }
         },
-        async unlikePost (like_id : number , post_id : number | null = null) {
+        async unlikePost (like_id : number , post_id : number ) {
             try {
                 let res = await $axios.delete(`/api/likes/${like_id}` );
 
                 let newLikeData : number = res.data.user_id;
 
 
-                for(let a of this.posts ?? []) {
-                    a.likes =  a.likes.filter(like => {
-                        return like.user_id != newLikeData;
-                    })
-                }
+                this.posts?.map((post) => {
+                    if(post.id == post_id) {
+                        post.likes = post.likes.filter(like => {
+                            return like.user_id != newLikeData;
+                        })
+                    }
+                    return post;
+                })
+
+
+                console.log(this.posts);
 
                 if(this.selectedPost && post_id ) {
                     this.selectedPost.likes = this.selectedPost.likes.filter(like => like.id != like_id);
+                    console.log('workk');
                 }
+                
+                
+                
             } catch (error) {
                 
             }

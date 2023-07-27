@@ -44,6 +44,7 @@
                         <div class="pb-4 text-center">
                             <button @click="isLiked ? unlikePost(post) : likePost(post)"
                                 class="rounded-full bg-gray-200 p-2 cursor-pointer">
+                                {{ props.post.likes }}
 
                                 <Icon name="mdi:heart" size="25" :color="isLiked == true ? '#F02C56' : ''" />
                             </button>
@@ -77,8 +78,10 @@ import { PropType } from 'nuxt/dist/app/compat/capi';
 import { threadId } from 'worker_threads';
 import IPost from '~/models/IPost';
 import IUser from '~/models/IUser';
+import {useLike} from '~/hooks/useLike';
+import useFollow from '~/hooks/useFollow';
 
-const { $generalStore, $userStore } = useNuxtApp()
+const { $generalStore, $userStore ,  } = useNuxtApp()
 
 const props = defineProps({
     post: {
@@ -86,6 +89,11 @@ const props = defineProps({
         required: true
     }
 })
+
+
+
+const {isLiked , likePost , unlikePost} = useLike(props.post.likes);
+const {isFollow , followUser , unFollow} = useFollow(props.post.user.id ?? 0);
 
 
 onMounted(() => {
@@ -116,31 +124,6 @@ let video = ref<HTMLVideoElement | null>(null)
 
 
 
-
-
-const isLiked = computed(() => {
-    let res = props.post.likes.find(like => like.user_id == $userStore.id);
-    return res ? true : false;
-})
-
-const likePost = async (post: IPost) => {
-    if (!$userStore.id) return;
-
-    $generalStore.likePost(post.id);
-
-}
-
-const unlikePost = async (post: IPost) => {
-    if (!$userStore.id) return;
-
-    let like = post.likes.find((like) => like.user_id == $userStore.id);
-    if (like) {
-        $generalStore.unlikePost(like.id);
-    }
-}
-
-
-
 const displayPost = (post: IPost) => {
     if (!$userStore.id) return;
 
@@ -149,23 +132,5 @@ const displayPost = (post: IPost) => {
     router.push(`/post/${post.id}`);
 }
 
-
-// FOLLOW USER OR UN FOLLOW
-const isFollow = computed(() => {
-    let res = $userStore?.follows?.find(follow => follow.user_id == $userStore.id);
-    return res ? true : false;
-})
-
-const followUser = (follow_id : number) => {
-    $userStore.followUser(follow_id);
-}
-
-const unFollow = () => {
-    const isFollow = $userStore.follows?.find((follow) => follow.follow_id == props.post.user.id);
-
-    if(!isFollow) return;
-
-    $userStore.deleteFollow(isFollow.id);
-}
 
 </script>
