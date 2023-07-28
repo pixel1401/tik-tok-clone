@@ -44,7 +44,6 @@
                         <div class="pb-4 text-center">
                             <button @click="isLiked ? unlikePost(post) : likePost(post)"
                                 class="rounded-full bg-gray-200 p-2 cursor-pointer">
-                                {{ props.post.likes }}
 
                                 <Icon name="mdi:heart" size="25" :color="isLiked == true ? '#F02C56' : ''" />
                             </button>
@@ -83,6 +82,9 @@ import useFollow from '~/hooks/useFollow';
 
 const { $generalStore, $userStore ,  } = useNuxtApp()
 
+
+
+
 const props = defineProps({
     post: {
         type: Object as PropType<IPost>,
@@ -91,8 +93,10 @@ const props = defineProps({
 })
 
 
+const likeArray = toRef(props.post, 'likes');
 
-const {isLiked , likePost , unlikePost} = useLike(props.post.likes);
+
+const {isLiked , likePost , unlikePost} = useLike(likeArray);
 const {isFollow , followUser , unFollow} = useFollow(props.post.user.id ?? 0);
 
 
@@ -128,7 +132,7 @@ const displayPost = (post: IPost) => {
     if (!$userStore.id) return;
 
     $generalStore.setBackUrl('/');
-    $generalStore.selectedPost = undefined;
+    $generalStore.selectedPost = null;
     router.push(`/post/${post.id}`);
 }
 

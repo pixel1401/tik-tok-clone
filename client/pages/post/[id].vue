@@ -180,7 +180,6 @@ let isVideoMuted = ref<boolean>(video?.value?.muted ?? false);
 let isPauseVideo = ref<boolean>(video?.value?.paused ?? false);
 let isShowPlayOrPauseIconAnimation = ref<boolean>(false);
 
-let arrtest = ref<ILikes[]>([])
 
 const { $generalStore, $userStore } = useNuxtApp();
 const { selectedPost, ids } = storeToRefs($generalStore);
@@ -190,24 +189,20 @@ const router = useRouter();
 const route = useRoute();
 
 
+const likesRef = computed(() => selectedPost.value?.likes ?? []);
+const {isLiked , unlikePost , likePost } = useLike(toRef(likesRef));
 
-
-const {isLiked , unlikePost , likePost } = useLike(selectedPost?.value?.likes ?? []);
 
 
 
 onMounted(async () => {
-    $generalStore.selectedPost = undefined;
+    $generalStore.selectedPost = null;
     let postId = route.params.id;
     if (typeof postId === 'string') {
         currentPostID.value = +postId;
         try {
             await $generalStore.getPost(postId);
-            console.log(selectedPost?.value?.user.id, $userStore.id);
-
             isOwnerPost.value = selectedPost?.value?.user.id == $userStore.id;
-            // setLikeArray(selectedPost?.value?.likes ?? []);
-
         } catch (error) {
             router.push('/');
         }
@@ -220,6 +215,10 @@ onMounted(async () => {
 
     }
 });
+
+
+
+
 
 onBeforeMount(() => {
     if (video.value) {

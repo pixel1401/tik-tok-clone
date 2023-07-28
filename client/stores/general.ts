@@ -13,7 +13,7 @@ export const useGeneralStore = defineStore('general', {
     state: (): IGeneral => ({
         isLoginOpen: false,
         isEditProfileOpen: false,
-        selectedPost: undefined,
+        selectedPost: null,
         ids: [],
         isBackUrl: '/',
         posts: [],
@@ -93,7 +93,7 @@ export const useGeneralStore = defineStore('general', {
             try {
                 let res = await $axios.delete(`api/posts/${post_id}`);
                 if(!res.data.success) return;
-                this.selectedPost = undefined;
+                this.selectedPost = null;
                 this.posts = this.posts?.filter(post => post.id != post_id);
             } catch (error) {
                 
@@ -115,9 +115,6 @@ export const useGeneralStore = defineStore('general', {
                     }
                 }
 
-                console.log(this.posts);
-                
-
                 if(this.selectedPost && this.selectedPost.id == post_id) {
                     this.selectedPost.likes.push(newLikeData);
                 }
@@ -126,6 +123,9 @@ export const useGeneralStore = defineStore('general', {
                 
             }
         },
+
+        
+
         async unlikePost (like_id : number , post_id : number ) {
             try {
                 let res = await $axios.delete(`/api/likes/${like_id}` );
@@ -133,7 +133,7 @@ export const useGeneralStore = defineStore('general', {
                 let newLikeData : number = res.data.user_id;
 
 
-                this.posts?.map((post) => {
+                this.posts = this.posts?.map((post) => {
                     if(post.id == post_id) {
                         post.likes = post.likes.filter(like => {
                             return like.user_id != newLikeData;
@@ -143,12 +143,12 @@ export const useGeneralStore = defineStore('general', {
                 })
 
 
-                console.log(this.posts);
 
                 if(this.selectedPost && post_id ) {
                     this.selectedPost.likes = this.selectedPost.likes.filter(like => like.id != like_id);
-                    console.log('workk');
                 }
+
+                
                 
                 
                 
@@ -188,4 +188,6 @@ export const useGeneralStore = defineStore('general', {
        
 
     },
+
+    
 })

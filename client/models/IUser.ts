@@ -5,11 +5,13 @@ export default interface IUser {
     image?: string,
     created_at?: string
     updated_at?: string,
-    follows? : IFollow[]
+    followers?: IFollow[],
+    following?: IFollow[],
 }
 
-interface IFollow {
-    id : number,
-    user_id : number,
-    follow_id : number
+
+export interface IFollow {
+    id: number
+    user_id: number
+    follow_id: number
 }

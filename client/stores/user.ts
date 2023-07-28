@@ -12,7 +12,8 @@ export const useUserStore = defineStore('user', {
         name: undefined,
         bio: undefined,
         image: undefined,
-        follows : []
+        followers : [],
+        following : []
     }),
 
     actions: {
@@ -54,7 +55,7 @@ export const useUserStore = defineStore('user', {
                     follow_id
                 });
                 if(res.status !=200 ) return ;
-                this.follows?.push(res.data.follow);
+                this.followers?.push(res.data.follow);
             } catch (error) {
                 
             }
@@ -64,7 +65,7 @@ export const useUserStore = defineStore('user', {
             try {
                 let res = await $axios.delete(`/api/follow/${id}`);
                 if(res.status !=200 ) return ;
-                this.follows = this.follows?.filter(follow => follow.id != id);
+                this.followers = this.followers?.filter(follow => follow.id != id);
             } catch (error) {
                 
             }
@@ -88,7 +89,8 @@ export const useUserStore = defineStore('user', {
                 this.$state.name = undefined,
                 this.$state.image = undefined,
                 this.$state.id = undefined;
-                this.$state.follows = undefined;
+                this.$state.followers = undefined;
+                this.$state.following = undefined;
         },
 
         setUser(dataUser: IUser) {
@@ -96,7 +98,8 @@ export const useUserStore = defineStore('user', {
             this.$state.bio = dataUser.bio;
             this.$state.name = dataUser.name;
             this.$state.image = dataUser.image;
-            this.$state.follows = dataUser.follows
+            this.$state.followers = dataUser.followers,
+            this.$state.following = dataUser.following
         },
 
         isLoggedIn(user: IUser) {

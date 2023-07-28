@@ -26,26 +26,27 @@
 
                     <button 
                         v-else
+                        @click="isFollow ? unFollow() : followUser(id ?? 0)"
                         class="flex item-center rounded-md py-1.5 px-8 mt-3 text-[15px] text-white font-semibold bg-[#F02C56]"
                     >
-                        Follow
+                    {{ isFollow ? 'UnFollow' : 'Follow'}}
                     </button>
                 </div>
             </div>
 
             <div class="flex items-center pt-4 flex-wrap md:flex-nowrap">
                 <div class="mr-4">
-                    <span class="font-bold">10K</span>
+                    <span class="font-bold">{{ $userStore.following?.length }}</span>
                     <span class="text-gray-500 font-light text-[15px] pl-1.5">Following</span>
                 </div>
                 <div class="mr-4">
-                    <span class="font-bold">44K</span>
+                    <span class="font-bold">{{ $userStore.followers?.length }}</span>
                     <span class="text-gray-500 font-light text-[15px] pl-1.5">Followers</span>
                 </div>
-                <div class="mr-4">
+                <!-- <div class="mr-4">
                     <span class="font-bold">5</span>
                     <span class="text-gray-500 font-light text-[15px] pl-1.5">Likes</span>
-                </div>
+                </div> -->
             </div>
 
             <div class="pt-4 mr-4 text-gray-500 font-light text-[15px] pl-1.5 max-w-[500px]">
@@ -68,6 +69,7 @@
 </template>
 
 <script  setup lang="ts">
+import useFollow from '~/hooks/useFollow';
 import { storeToRefs } from 'pinia';
 
 let isOwnerProfile = ref<boolean>(false);
@@ -76,7 +78,13 @@ let isOwnerProfile = ref<boolean>(false);
 const route = useRoute();
 const {$generalStore , $profileStore , $userStore} = useNuxtApp();
 
-const {name , id , image , bio} = storeToRefs($profileStore)
+const {name , id , image , bio ,} = storeToRefs($profileStore)
+
+
+
+const {isFollow , followUser, unFollow} = useFollow(route?.params?.id != undefined ? +route.params.id : 0);
+
+
 
 onMounted( async () => {
     if(route.params.id) {

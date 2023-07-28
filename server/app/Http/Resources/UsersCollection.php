@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -20,7 +21,14 @@ class UsersCollection extends ResourceCollection
                 'name' => $user->name,
                 'bio' => $user->bio,
                 'image' => url('/') . $user->image,
-                'follows' => $user->follows->map(function ($follow) {
+                'followers' => $user->followers->map(function ($follow) {
+                    return [
+                        'id'=> $follow->id,
+                        'user_id'=> $follow->user_id,
+                        'follow_id'=> $follow->follow_id,
+                    ];
+                }),
+                'following' => $user->following->map(function ($follow) {
                     return [
                         'id'=> $follow->id,
                         'user_id'=> $follow->user_id,
@@ -32,4 +40,10 @@ class UsersCollection extends ResourceCollection
             ];
         } );
     }
+
+
+    
+
+
 }
+

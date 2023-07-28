@@ -17,8 +17,9 @@ class UserController extends Controller
     public function loggedInUser()
     {
         try {
-            $user = User::where('id' , auth()->user()->id)->get();
-            return response()->json(new UsersCollection($user) , 200);
+            $user = User::findOrFail(auth()->user()->id);
+            // dd($user);
+            return response()->json(new UsersCollection([$user]) , 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()] , 400);
         }
@@ -49,7 +50,7 @@ class UserController extends Controller
     public function getUser($id)
     {
         try {
-            $user = User::findOrFail($id);
+            $user = User::query()->findOrFail($id);
             return response()->json(['success' => "OK" , 'user' => $user ]);
         } catch (\Exception $th) {
             return response()->json(['error'=> $th->getMessage()]);
