@@ -31,7 +31,7 @@ export const useGeneralStore = defineStore('general', {
             }
         },
 
-        allLowerCaseNoCaps(str : string) {
+        allLowerCaseNoCaps(str: string) {
             return str.split(' ').join('').toLowerCase()
         },
 
@@ -60,26 +60,32 @@ export const useGeneralStore = defineStore('general', {
             })
         },
 
-        async getRandomUser () {
+        async getRandomUser() {
             try {
                 let res = await $axios.get('/api/get-random-users');
                 this.suggested = res.data.suggested;
-                this.following = res.data.following;    
+                this.following = res.data.following;
             } catch (error) {
-                
+
             }
         },
 
-        async getPosts () {
+        async getPosts() {
             try {
                 let res = await $axios.get('/api/home');
-                this.$state.posts = res.data.posts;
-            } catch (error) {
+                let val = this.posts;                
+                // this.posts = res.data.posts;
+                // console.log(val === this.posts , val , this.posts);
+                this.$patch({
+                    posts : res.data.posts
+                })
                 
+            } catch (error) {
+
             }
         },
 
-        async getPost(post_id : string) {
+        async getPost(post_id: string) {
             try {
                 let res = await $axios.get(`/api/posts/${post_id}`);
                 this.selectedPost = res.data.post[0];
@@ -89,52 +95,52 @@ export const useGeneralStore = defineStore('general', {
             }
         },
 
-        async deletePost (post_id : number) {
+        async deletePost(post_id: number) {
             try {
                 let res = await $axios.delete(`api/posts/${post_id}`);
-                if(!res.data.success) return;
+                if (!res.data.success) return;
                 this.selectedPost = null;
                 this.posts = this.posts?.filter(post => post.id != post_id);
             } catch (error) {
-                
+
             }
         },
 
-        async likePost (post_id : number) {
+        async likePost(post_id: number) {
             try {
-                let res = await $axios.post('/api/likes' , {
+                let res = await $axios.post('/api/likes', {
                     post_id
                 });
 
-                let newLikeData : ILikes = res.data.like;
+                let newLikeData: ILikes = res.data.like;
 
-                for(let a of this.posts ?? []) {
-                    if(a.id == post_id) {
+                for (let a of this.posts ?? []) {
+                    if (a.id == post_id) {
                         a.likes.push(newLikeData);
                         break;
                     }
                 }
 
-                if(this.selectedPost && this.selectedPost.id == post_id) {
+                if (this.selectedPost && this.selectedPost.id == post_id) {
                     this.selectedPost.likes.push(newLikeData);
                 }
 
             } catch (error) {
-                
+
             }
         },
 
-        
 
-        async unlikePost (like_id : number , post_id : number ) {
+
+        async unlikePost(like_id: number, post_id: number) {
             try {
-                let res = await $axios.delete(`/api/likes/${like_id}` );
+                let res = await $axios.delete(`/api/likes/${like_id}`);
 
-                let newLikeData : number = res.data.user_id;
+                let newLikeData: number = res.data.user_id;
 
 
                 this.posts = this.posts?.map((post) => {
-                    if(post.id == post_id) {
+                    if (post.id == post_id) {
                         post.likes = post.likes.filter(like => {
                             return like.user_id != newLikeData;
                         })
@@ -144,50 +150,50 @@ export const useGeneralStore = defineStore('general', {
 
 
 
-                if(this.selectedPost && post_id ) {
+                if (this.selectedPost && post_id) {
                     this.selectedPost.likes = this.selectedPost.likes.filter(like => like.id != like_id);
                 }
 
-                
-                
-                
-                
+
+
+
+
             } catch (error) {
-                
+
             }
         },
 
-        async fetchComment (post_id : number , comment : string) {
+        async fetchComment(post_id: number, comment: string) {
             try {
-                let res = await $axios.post('/api/comments/' , {post_id , comment});
+                let res = await $axios.post('/api/comments/', { post_id, comment });
                 let commentData = res.data.comment;
-                const {$userStore} = useNuxtApp();
+                const { $userStore } = useNuxtApp();
                 commentData.user = {
-                    id : $userStore.id,
-                    name : $userStore.name,
-                    image : $userStore.image,
+                    id: $userStore.id,
+                    name: $userStore.name,
+                    image: $userStore.image,
                 };
                 this.selectedPost?.comments.unshift(commentData);
             } catch (error) {
-                
+
             }
         },
 
-        async deleteComment (comment_id : number) {
+        async deleteComment(comment_id: number) {
             try {
                 let res = await $axios.delete(`/api/comments/${comment_id}`);
-                if(!res.data.success) return; 
-                if(this.selectedPost) {
+                if (!res.data.success) return;
+                if (this.selectedPost) {
                     this.selectedPost.comments = this.selectedPost.comments.filter((comment) => comment.id != comment_id);
                 }
             } catch (error) {
-                
+
             }
         }
 
-       
+
 
     },
 
-    
+
 })

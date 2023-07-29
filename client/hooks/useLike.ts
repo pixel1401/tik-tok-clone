@@ -4,6 +4,10 @@ export function useLike(likes : globalThis.Ref<ILikes[]>  ) {
 
     const {$generalStore , $userStore} = useNuxtApp();
 
+
+    const likesRef = toRef(likes); 
+
+
     const isLiked = computed(() => {
         let res = likes.value.find(like => like.user_id == $userStore.id); 
         return res ? true : false;

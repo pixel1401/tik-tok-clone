@@ -13,16 +13,13 @@
                         {{ props.post.user?.name ?? '' }}
                     </span>
                 </button>
-                <div
-                    v-if="props.post.user.id != $userStore.id "    
-                >
-                    <button
-                    @click="isFollow ? unFollow() : followUser(props.post.user.id ?? 0)"
-                    class="border text-[15px] px-[21px] py-0.5 border-[#F02C56] text-[#F02C56] hover:bg-[#ffeef2] font-semibold rounded-md">
-                    {{ isFollow ? 'UnFollow' : 'Follow'}}
-                </button>
+                <div v-if="props.post.user.id != $userStore.id">
+                    <button @click="isFollow ? unFollow() : followUser(props.post.user.id ?? 0)"
+                        class="border text-[15px] px-[21px] py-0.5 border-[#F02C56] text-[#F02C56] hover:bg-[#ffeef2] font-semibold rounded-md">
+                        {{ isFollow ? 'UnFollow' : 'Follow' }}
+                    </button>
                 </div>
-                
+
             </div>
             <div class="text-[15px] pb-0.5 break-words md:max-w-[400px] max-w-[300px]">{{ props.post.text }}</div>
             <!-- <div class="text-[14px] text-gray-500 pb-0.5">#fun #cool #SuperAwesome</div> -->
@@ -77,10 +74,10 @@ import { PropType } from 'nuxt/dist/app/compat/capi';
 import { threadId } from 'worker_threads';
 import IPost from '~/models/IPost';
 import IUser from '~/models/IUser';
-import {useLike} from '~/hooks/useLike';
+import { useLike } from '~/hooks/useLike';
 import useFollow from '~/hooks/useFollow';
 
-const { $generalStore, $userStore ,  } = useNuxtApp()
+const { $generalStore, $userStore, } = useNuxtApp()
 
 
 
@@ -93,11 +90,11 @@ const props = defineProps({
 })
 
 
-const likeArray = toRef(props.post, 'likes');
+const likeArray = computed(() => props.post.likes);
 
+const { isLiked, likePost, unlikePost } = useLike(likeArray);
+const { isFollow, followUser, unFollow } = useFollow(props.post.user.id ?? 0);  
 
-const {isLiked , likePost , unlikePost} = useLike(likeArray);
-const {isFollow , followUser , unFollow} = useFollow(props.post.user.id ?? 0);
 
 
 onMounted(() => {
@@ -111,6 +108,7 @@ onMounted(() => {
         }
     }, { threshold: [0.6] });
 
+
     observer.observe(document.getElementById(`PostMain-${props.post.id}`) as Element);
 })
 
@@ -120,6 +118,8 @@ onBeforeUnmount(() => {
         video.value!.src = '';
     }
 })
+
+
 
 
 const router = useRouter()

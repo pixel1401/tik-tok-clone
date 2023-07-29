@@ -7,7 +7,7 @@ export default interface IGeneral {
     selectedPost : IPost | null,
     ids? : number[],
     isBackUrl : string,
-    posts?: IPost[],
+    posts : IPost[],
     suggested? : IUser[] ,
     following? : IUser[] 
 }
